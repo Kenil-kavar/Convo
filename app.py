@@ -49,17 +49,72 @@ def main():
 
 
 
+# Part 2
 
 
 
+from unsloth import FastLanguageModel
+import torch
+
+# Load the saved model and tokenizer
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name = "lora_model",
+    max_seq_length = 2048,
+    dtype = torch.float16,
+    load_in_4bit = True,
+)
+
+# Enable faster inference
+FastLanguageModel.for_inference(model)
+
+system_prompt = {
+    "role": "system",
+    "content": (
+        "You are a friendly and professional customer care assistant. "
+        "Assist users with clear and accurate guidance for their requests."
+    )
+}
+
+messages = [
+    system_prompt,
+    {"role": "assistant", "content": "Hi, how can I help you?"}
+]
+
+def chat_with_model(user_input):
+    global messages
+
+    messages.append({"role": "user", "content": user_input})
+
+    inputs = tokenizer.apply_chat_template(
+        messages,
+        tokenize=True,
+        add_generation_prompt=True,
+        return_tensors="pt"
+    ).to("cuda")
+
+    outputs = model.generate(
+        input_ids=inputs,
+        max_new_tokens=128,
+        temperature=1.0,
+        min_p=0.1
+    )
+
+    decoded_output = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    ai_response = decoded_output.split("assistant")[-1].strip()
+
+    print(f"AI: {ai_response}")
+    messages.append({"role": "assistant", "content": ai_response})
+
+print("AI: Hi, how can I help you?")
+while True:
+    user_input = transcription["text"]
+    if user_input.lower() in ["exit", "quit"]:
+        print("Ending chat. Goodbye!")
+        break
+    chat_with_model(user_input)
 
 
-
-
-
-
-
-
+# Part 3
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 MODEL = build_model('kokoro-v0_19.pth', device)
@@ -78,10 +133,9 @@ def split_text_into_chunks(text, chunk_size=500):
     return [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
 
 
-text=      """Pass your LLM response"""
 # Split the text into chunks
 chunk_size = 500  # Set the chunk size
-text_chunks = split_text_into_chunks(text, chunk_size)
+text_chunks = split_text_into_chunks(ai_response, chunk_size)
 
 # Generate audio for each chunk and concatenate the results
 audio_chunks = []
