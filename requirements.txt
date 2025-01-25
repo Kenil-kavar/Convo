@@ -10,4 +10,5 @@ langchain_groq
 langchain_huggingface
 langserve
 pycaw
+unsloth
 comtypes
