@@ -88,19 +88,19 @@ audio_chunks = []
 for chunk in text_chunks:
     audio, out_ps = generate(MODEL, chunk, VOICEPACK, lang=VOICE_NAME[0])
     audio_chunks.append(audio)
-
-# Combine the audio chunks into a single audio array
+    
+# Combine Audio
 combined_audio = np.concatenate(audio_chunks)
 
-# Play the combined audio using IPython's Audio widget
+# Playing the combined audio using IPython's Audio widget
 def play_audio(audio_data, sample_rate=24000):
-    """Play audio using IPython's Audio widget."""
+    """Playing audio using IPython's Audio widget."""
     display(Audio(data=audio_data, rate=sample_rate, autoplay=True))
 
 # Play the combined audio
 play_audio(combined_audio)
 
-# Print the output phonemes (optional)
+
 # Note: Phonemes will be specific to each chunk
 for chunk in text_chunks:
     _, out_ps = generate(MODEL, chunk, VOICEPACK, lang=VOICE_NAME[0])
