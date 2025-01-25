@@ -1,4 +1,6 @@
-# Kokoro-82M: Text-to-Speech Project
+# Convolabs AI
+
+#Kokoro-82M: Text-to-Speech Project
 
 Welcome to the **Kokoro-82M** project! This repository contains a powerful text-to-speech (TTS) model that converts text into high-quality speech. Follow the instructions below to set up and run the project.
 
