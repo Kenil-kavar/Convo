@@ -40,6 +40,9 @@ cd Kokoro-82M
 # Install espeak-ng (for phonemization)
 apt-get -qq -y install espeak-ng > /dev/null 2>&1
 
+# Clone the repo
+git clone https://github.com/Kenil-kavar/Convolabs-Bot.git
+
 # Install Python dependencies
 pip install -q phonemizer torch transformers scipy munch
 
