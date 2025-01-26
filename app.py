@@ -152,7 +152,7 @@ def main():
     initialize_chat_model()
 
     # Path to the audio file
-    audio_file_path = "../output.wav"  # Replace with the actual path to your audio file
+    audio_file_path = "sound.wav"  # Replace with the actual path to your audio file
 
     # Load the Kokoro model and voicepack
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -167,26 +167,23 @@ def main():
 
     # Main loop
     print("AI: Hi, how can I help you?")
-    while True:
-        # Transcribe the audio file
-        user_input = transcribe_audio_file(audio_file_path)
-        if not user_input:
-            print("Error: Transcription failed.")
-            continue
+    # Transcribe the audio file
+    user_input = transcribe_audio_file(audio_file_path)
+    if not user_input:
+        print("Error: Transcription failed.")
+        
 
-        # Check for exit condition
-        if user_input.lower() in ["exit", "quit"]:
-            print("Ending chat. Goodbye!")
-            break
+    # Check for exit condition
+    if user_input.lower() in ["exit", "quit"]:
+        print("Ending chat. Goodbye!")
 
-        # Get AI response
-        ai_response = chat_with_model(user_input)
-
-        # Generate and play audio for the AI response
-        if ai_response:
-            generate_and_play_audio(ai_response, kokoro_model, voicepack, voice_name)
-        else:
-            print("Error: No response from the chat model.")
+    # Get AI response
+    ai_response = chat_with_model(user_input)
+    # Generate and play audio for the AI response
+    if ai_response:
+        generate_and_play_audio(ai_response, kokoro_model, voicepack, voice_name)
+    else:
+        print("Error: No response from the chat model.")
 
 
 if __name__ == "__main__":
