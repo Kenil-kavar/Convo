@@ -1,11 +1,12 @@
 import requests
 import torch
 import numpy as np
-from IPython.display import Audio, display
 from dotenv import load_dotenv
 from unsloth import FastLanguageModel
 from models import build_model
 from kokoro import generate
+from scipy.io.wavfile import write
+from google.colab import files
 
 # Load environment variables
 load_dotenv()
@@ -117,8 +118,10 @@ def split_text_into_chunks(text, chunk_size=500):
 
 
 def play_audio(audio_data, sample_rate=24000):
-    """Play audio using IPython's Audio widget."""
-    display(Audio(data=audio_data, rate=sample_rate, autoplay=True))
+    """Save audio to a file."""
+    write("output.wav", sample_rate, audio_data)
+    print("Audio saved to output.wav. Please download and play it using an external player.")
+    files.download("output.wav")  # Download the file in Colab
 
 
 def generate_and_play_audio(text, model, voicepack, voice_name):
@@ -139,7 +142,7 @@ def generate_and_play_audio(text, model, voicepack, voice_name):
     # Combine audio chunks
     combined_audio = np.concatenate(audio_chunks)
 
-    # Play the combined audio
+    # Save and download the combined audio
     play_audio(combined_audio)
     for chunk in text_chunks:
       _, out_ps = generate(model, chunk, voicepack, lang=voice_name[0])
@@ -152,7 +155,7 @@ def main():
     initialize_chat_model()
 
     # Path to the audio file
-    audio_file_path = "sound.wav"  # Replace with the actual path to your audio file
+    audio_file_path = "sound_16k.wav"  # Replace with the actual path to your audio file
 
     # Load the Kokoro model and voicepack
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
