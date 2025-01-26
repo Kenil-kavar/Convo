@@ -15,6 +15,10 @@ load_dotenv()
 GROQ_API_KEY = "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"  # Replace with your GROQ API key
 URL = "https://api.groq.com/openai/v1/audio/transcriptions"
 
+os.environ["LANGCHAIN_API_KEY"] = "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"    #Langsmith API KEY
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_PROJECT"] = "Convolabs AI Assistant"
+
 # Global variables for the chat model
 model = None
 tokenizer = None
