@@ -1,6 +1,6 @@
 import requests
 import torch
-import numpy as np
+import numpy as np, os
 from dotenv import load_dotenv
 from unsloth import FastLanguageModel
 from models import build_model
@@ -125,7 +125,6 @@ def play_audio(audio_data, sample_rate=24000):
     """Save audio to a file."""
     write("output.wav", sample_rate, audio_data)
     print("Audio saved to output.wav. Please download and play it using an external player.")
-    files.download("output.wav")  # Download the file in Colab
 
 
 def generate_and_play_audio(text, model, voicepack, voice_name):
@@ -138,7 +137,7 @@ def generate_and_play_audio(text, model, voicepack, voice_name):
     # Generate audio for each chunk and concatenate the results
     audio_chunks = []
     if not text_chunks:
-      print("ERROR---------------")
+      print("ERROR--------------- in text_chunks")
     for chunk in text_chunks:
         audio, _ = generate(model, chunk, voicepack, lang=voice_name[0])
         audio_chunks.append(audio)
@@ -148,9 +147,7 @@ def generate_and_play_audio(text, model, voicepack, voice_name):
 
     # Save and download the combined audio
     play_audio(combined_audio)
-    for chunk in text_chunks:
-      _, out_ps = generate(model, chunk, voicepack, lang=voice_name[0])
-      print(out_ps)
+    
 
  
 def main():
