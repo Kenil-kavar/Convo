@@ -2,9 +2,7 @@ langchain
 python-dotenv
 langchain_community
 langchain-text-splitters
-langchain-openai
 langchain_chroma
-streamlit
 google-cloud-texttospeech
 langchain_groq
 langchain_huggingface
